@@ -20,7 +20,7 @@ case class Rules(strikeRules: List[StrikeRules],
                 )
 
 
-case class GameStatus(identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean)
+case class GameStatus(identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean, status:Option[String])
 
 
 trait Mediator {

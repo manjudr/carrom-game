@@ -1,6 +1,6 @@
 package com.sahaj.mediator
 
-import com.sahaj.executors.Player
+import com.sahaj.executors.{CarromBoard, Player}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.sahaj.services.AppConfig
@@ -21,7 +21,7 @@ object RuleManager extends Mediator {
     val rules: StrikeRules = this.getStrikeRules(ruleType)
     if (ruleType == AppConfig.getConfig("com.sahaj.command.redStrike")) {
       if (redCoins.get == 0) {
-        GameStatus(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus)
+        GameStatus(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus, None)
       } else {
         this.updateStatus(player, rules, false)
       }
@@ -45,8 +45,24 @@ object RuleManager extends Mediator {
     player.setBlackCoins(value.onBlockCoins)
     player.setPlayingStatus(value.playingStatus)
     player.setWonStatus(isWon)
-    GameStatus(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus)
+    GameStatus(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus, None)
   }
+
+  def getMatchStatus(player1: Player, player2: Player, carrom: CarromBoard): GameStatus = {
+    val minPointsToWon = this.getRules.minPointsToWon
+    val minDiffToWon = this.getRules.opponMinDiff
+
+    if (player1.getScore >= minPointsToWon && ((player1.getScore - player2.getScore) >= minDiffToWon)) {
+      GameStatus(player1.getIdentifier, player1.getScore, player1.getPlayingStatus, player1.getRedCoins, player1.getBlackCoins, player1.getWonStatus, Option("WON"))
+    }
+    else if (player2.getScore >= minPointsToWon && ((player2.getScore - player1.getScore) >= minDiffToWon)) {
+      GameStatus(player2.getIdentifier, player2.getScore, player2.getPlayingStatus, player2.getRedCoins, player2.getBlackCoins, player2.getWonStatus, Option("WON"))
+    } else {
+      null
+    }
+
+  }
+
 
   def failedHit(player: Player, value: StrikeRules): GameStatus = {
     var score = 0

@@ -1,9 +1,10 @@
 package com.sahaj.executors
 
+import com.sahaj.mediator.GameStatus
 import com.sahaj.services.AppConfig
 
 trait MainDashBoard {
-  def show(player: Option[Player], carrom: Option[CarromBoard]): Unit
+  def show(player: Option[Player], carrom: Option[CarromBoard], status: Option[GameStatus]): Unit
 
   def clear: Boolean
 
@@ -14,8 +15,8 @@ trait MainDashBoard {
 object DashBoard extends MainDashBoard {
   override def clear: Boolean = ???
 
-  override def show(player: Option[Player], carram: Option[CarromBoard]): Unit = {
-    if (carram.isEmpty) {
+  override def show(player: Option[Player], carram: Option[CarromBoard], status: Option[GameStatus]): Unit = {
+    if (player.isDefined) {
       println("==============PLAYER====================")
 
       println("IDENTIFIER: " + player.get.getIdentifier)
@@ -24,7 +25,13 @@ object DashBoard extends MainDashBoard {
       println("ATTEMPT: " + player.get.getAttempts)
       println("PLAYING STATUS: " + player.get.getPlayingStatus)
       println("FOULS COUNT:" + player.get.getFoulsCount)
-
+      println("========================================")
+    }
+    else if (status.isDefined) {
+      println("==================WINNER IS ===============")
+      println("IDENTIFIER -> " + status.get.identifier)
+      println("WON -> " + status.get.isWon)
+      println("SCORE -> " + status.get.score)
       println("========================================")
     }
     else {

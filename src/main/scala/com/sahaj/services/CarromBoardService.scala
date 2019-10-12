@@ -2,16 +2,17 @@ package com.sahaj.services
 
 import com.sahaj.command._
 import com.sahaj.executors.{CarromBoard, DashBoard, Player}
-import com.sahaj.mediator.RuleManager
+import com.sahaj.mediator.{GameStatus, RuleManager}
 
 
 object CarromBoardService {
+  private val carrom = new CarromBoard()
+
   def registerPlayer(identifier: String, wonToss: Boolean): Player = {
     new Player(identifier, wonToss)
   }
 
   def init(): Unit = {
-    val carrom = new CarromBoard()
     CommandManager.register(AppConfig.getConfig("com.sahaj.command.strike"), new Strike(carrom))
     CommandManager.register(AppConfig.getConfig("com.sahaj.command.multiStrike"), new MultiStrike(carrom))
     CommandManager.register(AppConfig.getConfig("com.sahaj.command.strikerStrike"), new StrikerStrike(carrom))
@@ -25,6 +26,10 @@ object CarromBoardService {
       val activePlayer = RuleManager.getPlayer(player1, player2)
       val command = DashBoard.promptOptions(activePlayer)
       CommandManager.execute(command, activePlayer)
+      val gameStatus: GameStatus = RuleManager.getMatchStatus(player1, player2, carrom)
+      if (gameStatus != null) {
+        DashBoard.show(None, None, Option(gameStatus))
+      }
     }
   }
 }
