@@ -53,7 +53,6 @@ class CarromBoard {
     * @return - PlayerStatus
     */
   def redStrike(player: Player): PlayerStatus = {
-    println("red")
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.redStrike"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
