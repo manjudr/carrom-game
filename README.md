@@ -12,7 +12,7 @@ Service which helps to play the carrom board game with multiple user.
 ## Game Rules:
 
 ```js
-  {
+ val rules = {
   "strikeRules": [
     {
       "ruleType": "STRIKE",
