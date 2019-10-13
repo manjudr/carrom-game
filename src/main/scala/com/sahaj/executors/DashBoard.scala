@@ -5,7 +5,7 @@
 
 package com.sahaj.executors
 
-import com.sahaj.models.PlayerStatus
+import com.sahaj.models.GameMetrics
 import com.sahaj.services.AppConfig
 
 /**
@@ -13,13 +13,13 @@ import com.sahaj.services.AppConfig
   */
 trait MainDashBoard {
   /**
-    * Method to show the player/carrom/game status
+    * Method to show the player/carrom/game metrics
     *
     * @param player - Player properties(id, score, isWon, ..etc.,
     * @param carram - CarromBoard, To show remaning red/block coins left on the carrom board
-    * @param status - Status of the Player/Game
+    * @param metrics - Status of the Player/Game
     */
-  def show(player: Option[Player], carrom: Option[CarromBoard], status: Option[PlayerStatus]): Unit
+  def show(player: Option[Player], carrom: Option[CarromBoard], metrics: Option[GameMetrics]): Unit
 
   /**
     * Method to clear the dashboard
@@ -38,19 +38,19 @@ trait MainDashBoard {
 }
 
 /**
-  * Dashboard manager to create the Dashboard to show score/player/match status
+  * Dashboard manager to create the Dashboard to show score/player/match metrics
   */
 object DashBoard extends MainDashBoard {
   override def clear: Boolean = ???
 
   /**
-    * Method to show the player/carrom/game status
+    * Method to show the player/carrom/game metrics
     *
     * @param player - Player properties(id, score, isWon, ..etc.,
     * @param carram - CarromBoard, To show remaning red/block coins left on the carrom board
-    * @param status - Status of the Player/Game
+    * @param metrics - Status of the Player/Game
     */
-  override def show(player: Option[Player], carram: Option[CarromBoard], status: Option[PlayerStatus]): Unit = {
+  override def show(player: Option[Player], carram: Option[CarromBoard], metrics: Option[GameMetrics]): Unit = {
     if (player.isDefined) {
       println("==============PLAYER====================")
 
@@ -62,11 +62,11 @@ object DashBoard extends MainDashBoard {
       println("FOULS COUNT:" + player.get.getFoulsCount)
       println("========================================")
     }
-    else if (status.isDefined) {
+    else if (metrics.isDefined) {
       println("==================GAME STATUS  ===============")
-      println("IDENTIFIER -> " + status.get.identifier)
-      println("WON -> " + status.get.isWon)
-      println("SCORE -> " + status.get.score)
+      println("IDENTIFIER -> " + metrics.get.identifier)
+      println("WON -> " + metrics.get.isWon)
+      println("SCORE -> " + metrics.get.score)
       println("========================================")
     }
     else {

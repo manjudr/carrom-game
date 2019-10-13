@@ -8,11 +8,11 @@ package com.sahaj.mediator
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.sahaj.executors.{CarromBoard, Player}
-import com.sahaj.models.{PlayerStatus, Rules, StrikeRules}
+import com.sahaj.models.{GameMetrics, Rules, StrikeRules}
 import com.sahaj.services.AppConfig
 
 /**
-  * RuleManager is like Umpire - Which validate the result, updates the score and status
+  * RuleManager is like Umpire - Which validate the result, updates the score and metrics
   */
 object RuleManager extends Mediator {
 
@@ -45,13 +45,13 @@ object RuleManager extends Mediator {
     * @param ruleType   - name of the strike rule
     * @param redCoins   - Number of red coins are present in the carrom instance
     * @param blockCoins - Number of block coins are present in the carrom instance
-    * @return - Player status
+    * @return - Metrics of the game (Game metrics)
     */
-  override def validate(player: Player, ruleType: String, redCoins: Option[Int], blockCoins: Option[Int]): PlayerStatus = {
+  override def validate(player: Player, ruleType: String, redCoins: Option[Int], blockCoins: Option[Int]): GameMetrics = {
     val rules: StrikeRules = this.getStrikeRules(ruleType)
     if (ruleType == AppConfig.getConfig("com.sahaj.command.redStrike")) {
       if (redCoins.get == 0) {
-        PlayerStatus(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus, None)
+        GameMetrics(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus, None)
       } else {
         this.updateStatus(player, rules, None)
       }
@@ -65,14 +65,14 @@ object RuleManager extends Mediator {
   }
 
   /**
-    * Method to update the status of the player - it can score, wonstatus etc..,
+    * Method to update the metrics of the player - it can score, wonstatus etc..,
     *
     * @param player - Player
     * @param value  - StrikeRule
     * @param isWon  - isPlayer won
-    * @return - Player status
+    * @return - Metrics of the game (Game metrics)
     */
-  private def updateStatus(player: Player, value: StrikeRules, isWon: Option[Boolean]): PlayerStatus = {
+  private def updateStatus(player: Player, value: StrikeRules, isWon: Option[Boolean]): GameMetrics = {
     if (!value.isValidStrike) player.setFoulsCount(player.getFoulsCount + 1)
     if (player.getFoulsCount == this.getRules.maxFouls) {
       value.score = value.score + this.getRules.onFouls
@@ -83,28 +83,28 @@ object RuleManager extends Mediator {
     player.setBlackCoins(value.onBlockCoins)
     player.setPlayingStatus(value.playingStatus)
     player.setWonStatus(isWon)
-    PlayerStatus(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus, None)
+    GameMetrics(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus, None)
   }
 
   /**
-    * To check wheather game is won or not. - Game status
+    * To check wheather game is won or not. - Game metrics
     *
     * @param player1 - Player instnace
     * @param player2 - Player instance
     * @param carrom  - CarromBoard instance
-    * @return - Game status
+    * @return - Game metrics
     */
-  def getMatchStatus(player1: Player, player2: Player, carrom: CarromBoard): PlayerStatus = {
+  def getMatchStatus(player1: Player, player2: Player, carrom: CarromBoard): GameMetrics = {
     val minPointsToWon = this.getRules.minPointsToWon
     val minDiffToWon = this.getRules.opponMinDiff
 
     if (player1.getScore >= minPointsToWon && ((player1.getScore - player2.getScore) >= minDiffToWon)) {
       player1.setWonStatus(Some(true))
-      PlayerStatus(player1.getIdentifier, player1.getScore, player1.getPlayingStatus, player1.getRedCoins, player1.getBlackCoins, player1.getWonStatus, Option("WON"))
+      GameMetrics(player1.getIdentifier, player1.getScore, player1.getPlayingStatus, player1.getRedCoins, player1.getBlackCoins, player1.getWonStatus, Option("WON"))
     }
     else if (player2.getScore >= minPointsToWon && ((player2.getScore - player1.getScore) >= minDiffToWon)) {
       player2.setWonStatus(Some(true))
-      PlayerStatus(player2.getIdentifier, player2.getScore, player2.getPlayingStatus, player2.getRedCoins, player2.getBlackCoins, player2.getWonStatus, Option("WON"))
+      GameMetrics(player2.getIdentifier, player2.getScore, player2.getPlayingStatus, player2.getRedCoins, player2.getBlackCoins, player2.getWonStatus, Option("WON"))
     } else {
       null
     }
@@ -116,9 +116,9 @@ object RuleManager extends Mediator {
     *
     * @param player - Player instance
     * @param value  - strike rule
-    * @return - Player status
+    * @return - Metrics of the game (Game metrics)
     */
-  private def failedHit(player: Player, value: StrikeRules): PlayerStatus = {
+  private def failedHit(player: Player, value: StrikeRules): GameMetrics = {
     var score = 0
     var isPlaying = true
     if (player.getAttempts == value.maxAttempts.getOrElse(3)) {

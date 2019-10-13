@@ -6,7 +6,7 @@
 package com.sahaj.command
 
 import com.sahaj.executors.Player
-import com.sahaj.models.PlayerStatus
+import com.sahaj.models.GameMetrics
 
 import scala.collection.mutable
 
@@ -32,9 +32,9 @@ object CommandManager {
     *
     * @param commandName - Name of the command
     * @param player      - Player
-    * @return - PlayerStatus of the execution
+    * @return - GameMetrics of the execution
     */
-  def execute(commandName: String, player: Player): PlayerStatus = {
+  def execute(commandName: String, player: Player): GameMetrics = {
     val command: Command = commandMap(commandName)
     if (command == null) throw new IllegalStateException("no command registered for " + commandName)
     command.execute(player)

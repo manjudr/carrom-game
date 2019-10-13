@@ -6,7 +6,7 @@
 package com.sahaj.mediator
 
 import com.sahaj.executors.Player
-import com.sahaj.models.{PlayerStatus, Rules, StrikeRules}
+import com.sahaj.models.{GameMetrics, Rules, StrikeRules}
 
 
 /**
@@ -36,9 +36,9 @@ trait Mediator {
     * @param ruleType   - name fo the strike rule
     * @param blockCoins - Number of block coins are present in the carrom instance
     * @param redCoins   - Number of red coins are present in the carrom instance
-    * @return - Player status
+    * @return - Metrics of the game (Game metrics)
     */
-  def validate(player: Player, ruleType: String, blockCoins: Option[Int], redCoins: Option[Int]): PlayerStatus
+  def validate(player: Player, ruleType: String, blockCoins: Option[Int], redCoins: Option[Int]): GameMetrics
 
 }
 

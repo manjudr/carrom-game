@@ -5,7 +5,7 @@
 package com.sahaj.executors
 
 import com.sahaj.mediator.RuleManager
-import com.sahaj.models.PlayerStatus
+import com.sahaj.models.GameMetrics
 import com.sahaj.services.AppConfig
 
 /**
@@ -25,22 +25,21 @@ class CarromBoard {
     * When player stiked coins
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def strike(player: Player): PlayerStatus = {
+  def strike(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.strike"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
-
   }
 
   /**
     * When player striked on multiple coins
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def multiStrike(player: Player): PlayerStatus = {
+  def multiStrike(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.multiStrike"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
@@ -50,9 +49,9 @@ class CarromBoard {
     * When player strike the red coin
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def redStrike(player: Player): PlayerStatus = {
+  def redStrike(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.redStrike"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
@@ -62,9 +61,9 @@ class CarromBoard {
     * When player strike the striker
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def strikerStrike(player: Player): PlayerStatus = {
+  def strikerStrike(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.strikerStrike"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
@@ -74,9 +73,9 @@ class CarromBoard {
     * When player defunct coin
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def defunctCoin(player: Player): PlayerStatus = {
+  def defunctCoin(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.defunctCoin"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
@@ -86,9 +85,9 @@ class CarromBoard {
     * When player failed hit
     *
     * @param player - Player
-    * @return - PlayerStatus
+    * @return - GameMetrics
     */
-  def failedHit(player: Player): PlayerStatus = {
+  def failedHit(player: Player): GameMetrics = {
     val response = RuleManager.validate(player, AppConfig.getConfig("com.sahaj.command.failedHit"), Option(this.redCoins), Option(this.bloackCoins))
     this.updateCarromStatus(response.redCoins, response.blockCoins)
     response
@@ -132,7 +131,7 @@ class CarromBoard {
   }
 
   /**
-    * Method to update the status of the carrom board
+    * Method to update the metrics of the carrom board
     *
     * @param redCoin   - Remaining red coins
     * @param blockCoin - Remaining block coin

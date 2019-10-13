@@ -6,7 +6,7 @@
 package com.sahaj.command
 
 import com.sahaj.executors.{CarromBoard, Player}
-import com.sahaj.models.PlayerStatus
+import com.sahaj.models.GameMetrics
 
 class DefunctCoin(game: CarromBoard) extends Command {
 
@@ -18,9 +18,9 @@ class DefunctCoin(game: CarromBoard) extends Command {
   /**
     *
     * @param player : Player
-    * @return PlayerStatus - {identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean, status:Option[String]}
+    * @return GameMetrics - {identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean, metrics:Option[String]}
     */
-  override def execute(player: Player): PlayerStatus = {
+  override def execute(player: Player): GameMetrics = {
     this.carrom.defunctCoin(player)
   }
 }

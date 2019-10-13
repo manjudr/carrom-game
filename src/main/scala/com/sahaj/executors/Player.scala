@@ -8,7 +8,7 @@ package com.sahaj.executors
   * Player class
   *
   * @param id      - Player identifier
-  * @param wonToss - Player won toss status
+  * @param wonToss - Player won toss metrics
   */
 class Player(id: String, wonToss: Boolean) {
 
@@ -33,7 +33,7 @@ class Player(id: String, wonToss: Boolean) {
   private var score: Int = 0
 
   /**
-    * Player won status
+    * Player won metrics
     */
   private var isWon: Option[Boolean] = Some(false)
 
@@ -98,16 +98,16 @@ class Player(id: String, wonToss: Boolean) {
   }
 
   /**
-    * Method to get the player won status
+    * Method to get the player won metrics
     *
-    * @return - Won status - true/false
+    * @return - Won metrics - true/false
     */
   def getWonStatus: Boolean = {
     this.isWon.getOrElse(false)
   }
 
   /**
-    * Method to update the won status of the player
+    * Method to update the won metrics of the player
     *
     * @param status - True/False
     */
@@ -150,18 +150,18 @@ class Player(id: String, wonToss: Boolean) {
   }
 
   /**
-    * Method to set the player playing status - playing or not.
+    * Method to set the player playing metrics - playing or not.
     *
-    * @param isPlaying - Playing status of the player(true/false)
+    * @param isPlaying - Playing metrics of the player(true/false)
     */
   def setPlayingStatus(isPlaying: Boolean): Unit = {
     this.isPlaying = isPlaying
   }
 
   /**
-    * Method to get the player playing status - playing or not.
+    * Method to get the player playing metrics - playing or not.
     *
-    * @return - Playing status
+    * @return - Playing metrics
     */
   def getPlayingStatus: Boolean = {
     this.isPlaying

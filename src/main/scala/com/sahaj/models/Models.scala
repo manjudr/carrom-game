@@ -40,23 +40,23 @@ case class Rules(strikeRules: List[StrikeRules],
                 )
 
 /**
-  * Which gives the stats of the player
+  * Which gives the stats of the player/Game - Metrics
   *
   * @param identifier - Player identifier
   * @param score      - Player score
-  * @param isPlaying  - Playing status - true/false
+  * @param isPlaying  - Playing metrics - true/false
   * @param redCoins   - Number of red-coins are pockted
   * @param blockCoins - Number of block coins are pockted
   * @param isWon      - isPlayer won
-  * @param status     - Game status - It can be WON,DRAW, NOT_WON
+  * @param status     - Game metrics - It can be WON,DRAW, NOT_WON
   */
-case class PlayerStatus(identifier: String,
-                        score: Int,
-                        isPlaying: Boolean,
-                        redCoins: Int,
-                        blockCoins: Int,
-                        isWon: Boolean,
-                        status: Option[String]
+case class GameMetrics(identifier: String,
+                       score: Int,
+                       isPlaying: Boolean,
+                       redCoins: Int,
+                       blockCoins: Int,
+                       isWon: Boolean,
+                       status: Option[String]
                        )
 
 

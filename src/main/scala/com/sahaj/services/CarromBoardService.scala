@@ -7,7 +7,7 @@ package com.sahaj.services
 import com.sahaj.command._
 import com.sahaj.executors.{CarromBoard, DashBoard, Player}
 import com.sahaj.mediator.RuleManager
-import com.sahaj.models.PlayerStatus
+import com.sahaj.models.GameMetrics
 
 /**
   * CarromBoardService which is exposed to user to play the carrom game.
@@ -19,8 +19,8 @@ object CarromBoardService {
     * Method to register to the players
     *
     * @param identifier - Player identifier
-    * @param isWonToss  - Player won toss status
-    * @return
+    * @param isWonToss  - Player won toss metrics
+    * @return - Active player
     */
   def registerPlayer(identifier: String, isWonToss: Boolean): Player = {
     new Player(identifier, isWonToss)
@@ -72,9 +72,9 @@ object CarromBoardService {
     *
     * @param player1 - Player instance
     * @param player2 - Player Instance
-    * @return - Player status
+    * @return - Metrics of the game (Game metrics)
     */
-  def getMatchStatus(player1: Player, player2: Player): PlayerStatus = {
+  def getMatchStatus(player1: Player, player2: Player): GameMetrics = {
     RuleManager.getMatchStatus(player1, player2, carrom)
   }
 
@@ -83,9 +83,9 @@ object CarromBoardService {
     *
     * @param player  - Player Instnace
     * @param command - Which command to invoke
-    * @return
+    * @return - Metrics of the game (Game metrics)
     */
-  def play(player: Player, command: String): PlayerStatus = {
+  def play(player: Player, command: String): GameMetrics = {
     CommandManager.execute(command, player)
   }
 }
