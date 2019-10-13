@@ -10,14 +10,16 @@ class TestCarromService extends BaseSpec {
       "Player1 should win a points" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
 
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", true)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", false)
+        /**
+          * When player1 strike
+          */
         val status = CarromBoardService.play(player1, AppConfig.getConfig("com.sahaj.command.strike"))
+
         assert(status.score === 1)
         assert(status.identifier === "Manjunath Davanam")
       }
@@ -27,13 +29,15 @@ class TestCarromService extends BaseSpec {
       "Player1 should win a more than 2 points" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
 
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", false)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
+
+        /**
+          * When player did multi-strike
+          */
         val status = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.multiStrike"))
 
         assert(status.score === 2)
@@ -45,15 +49,15 @@ class TestCarromService extends BaseSpec {
       "Player should wins 3 points" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
 
-
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", false)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
 
+        /**
+          * When player did redStrike
+          */
         val status = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.redStrike"))
         assert(status.score === 3)
         assert(status.identifier === "Maria Irudayam")
@@ -65,13 +69,14 @@ class TestCarromService extends BaseSpec {
       "Player should lose a point" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", false)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
 
+        /**
+          * When player did striker-strike
+          */
         val status = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.strikerStrike"))
         assert(status.score === -1)
         assert(status.identifier === "Maria Irudayam")
@@ -83,14 +88,15 @@ class TestCarromService extends BaseSpec {
       "Player should lose a point" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
 
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", false)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
-        println("player2" + player2.getScore)
+
+        /**
+          * When player did defunct coin
+          */
         val status = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.defunctCoin"))
         assert(status.score === -2)
         assert(status.identifier === "Maria Irudayam")
@@ -102,18 +108,18 @@ class TestCarromService extends BaseSpec {
       "Player should lose a point" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
 
-        // Register two player to play the game.
         var player1 = CarromBoardService.registerPlayer("Manjunath Davanam", false)
         var player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
 
         val hit = 1
         val max_invalid_strike = 3
 
-        // for loop execution with a range
+        /**
+          * When player does not pocket any coin for 3 successive truns - failed hit
+          */
         val res = for (hit <- 1 to max_invalid_strike) yield {
           CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.failedHit"))
         }
@@ -126,18 +132,26 @@ class TestCarromService extends BaseSpec {
       "Player should lose 1 point additional" in {
         /**
           * GIVEN:
-          *  1.Fresh carrom board
-          *  2. Register two new player
+          *  1. Register two new player
           */
-        // Register two player to play the game.
         val player1 = CarromBoardService.registerPlayer("Raju", false)
         val player2 = CarromBoardService.registerPlayer("Maria Irudayam", true)
 
+        // Player2 score : 2
         CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.multiStrike"))
 
+        /**
+          * Player fouls for 3 times: Should loose extra 1 point
+          */
+
+        // Player2 Score here: 0
         var fouls1 = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.defunctCoin"))
+
+        // Player2 Score here: -1
         var fouls2 = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.strikerStrike"))
+        // Player score here -2
         val fouls3 = CarromBoardService.play(player2, AppConfig.getConfig("com.sahaj.command.strikerStrike"))
+        // Actual is -2, Since it is fouls for 3 times then aditional 1 point will deduct
         assert(fouls3.score === -3)
         assert(fouls3.identifier === "Maria Irudayam")
       }
@@ -170,9 +184,8 @@ class TestCarromService extends BaseSpec {
         val gameResult = CarromBoardService.getMatchStatus(player1, player2)
 
         assert(gameResult.identifier === "Manju")
-        assert(gameResult.score === 5)
-        println(gameResult.isWon === true)
-        println(gameResult.status === true)
+        assert(gameResult.score === 5) // Manju player got 5 score and 3 points more than opponent.
+
       }
     }
   }
