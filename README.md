@@ -6,7 +6,7 @@ Service which helps to play the carrom board game with multiple user.
 
 ## Architecture:
 
-![alt text](https://github.com/manjudr/carrom-game/raw/master/CarromBoard-Hight%20Level%20Architecture.png)
+![alt text](https://github.com/manjudr/carrom-game/raw/master/CarromBoard-Architecture.png)
 
 ## Build / Run
  
