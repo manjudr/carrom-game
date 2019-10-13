@@ -5,7 +5,7 @@ class Player(id: String, wonToss: Boolean) {
   private var redCoins: Int = 0
   private var blockCoins: Int = 0
   private var score: Int = 0
-  private var isWon: Boolean = false
+  private var isWon: Option[Boolean] = Some(false)
   private var isPlaying: Boolean = wonToss
   private var attempts: Int = 0
   private var foulsCount: Int = 0
@@ -31,10 +31,10 @@ class Player(id: String, wonToss: Boolean) {
   }
 
   def getWonStatus: Boolean = {
-    this.isWon
+    this.isWon.getOrElse(false)
   }
 
-  def setWonStatus(status: Boolean): Unit = {
+  def setWonStatus(status: Option[Boolean]): Unit = {
     this.isWon = status
   }
 
@@ -74,7 +74,7 @@ class Player(id: String, wonToss: Boolean) {
     this.redCoins = 0
     this.blockCoins = 0
     this.score = 0
-    this.isWon = false
+    this.isWon = Some(false)
     this.attempts = 0
     this.isPlaying = false
     this.foulsCount = 0

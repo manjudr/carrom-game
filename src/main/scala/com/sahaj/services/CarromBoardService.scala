@@ -2,14 +2,18 @@ package com.sahaj.services
 
 import com.sahaj.command._
 import com.sahaj.executors.{CarromBoard, DashBoard, Player}
-import com.sahaj.mediator.{GameStatus, RuleManager}
+import com.sahaj.mediator.{PlayerStatus, RuleManager}
 
 
 object CarromBoardService {
-  private val carrom = new CarromBoard()
+  private val carrom = this.getCarromBoard
 
   def registerPlayer(identifier: String, wonToss: Boolean): Player = {
     new Player(identifier, wonToss)
+  }
+
+  def getCarromBoard: CarromBoard = {
+    new CarromBoard()
   }
 
   def init(): Unit = {
@@ -21,15 +25,24 @@ object CarromBoardService {
     CommandManager.register(AppConfig.getConfig("com.sahaj.command.failedHit"), new FailedStrike(carrom))
   }
 
-  def play(player1: Player, player2: Player): Unit = {
+  def autoPlay(player1: Player, player2: Player): Unit = {
     while (!player1.getWonStatus || !player2.getWonStatus) {
       val activePlayer = RuleManager.getPlayer(player1, player2)
       val command = DashBoard.promptOptions(activePlayer)
-      CommandManager.execute(command, activePlayer)
-      val gameStatus: GameStatus = RuleManager.getMatchStatus(player1, player2, carrom)
+      val playerStatus = CommandManager.execute(command, activePlayer)
+      DashBoard.show(None, None, Option(playerStatus))
+      val gameStatus = this.getMatchStatus(player1, player2)
       if (gameStatus != null) {
         DashBoard.show(None, None, Option(gameStatus))
       }
     }
+  }
+
+  def getMatchStatus(player1: Player, player2: Player): PlayerStatus = {
+    RuleManager.getMatchStatus(player1, player2, carrom)
+  }
+
+  def play(player: Player, command: String): PlayerStatus = {
+    CommandManager.execute(command, player)
   }
 }

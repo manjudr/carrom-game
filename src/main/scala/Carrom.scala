@@ -6,6 +6,6 @@ object Carrom {
     CarromBoardService.init()
     val player1: Player = CarromBoardService.registerPlayer("Manju", true)
     val player2: Player = CarromBoardService.registerPlayer("Manoj", false)
-    CarromBoardService.play(player1, player2)
+    CarromBoardService.autoPlay(player1, player2)
   }
 }

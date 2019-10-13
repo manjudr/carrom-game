@@ -17,24 +17,24 @@ object RuleManager extends Mediator {
     mapper.readValue(AppConfig.getConfig("com.sahaj.rules"), classOf[Rules])
   }
 
-  override def validate(player: Player, ruleType: String, redCoins: Option[Int], blockCoins: Option[Int]): GameStatus = {
+  override def validate(player: Player, ruleType: String, redCoins: Option[Int], blockCoins: Option[Int]): PlayerStatus = {
     val rules: StrikeRules = this.getStrikeRules(ruleType)
     if (ruleType == AppConfig.getConfig("com.sahaj.command.redStrike")) {
       if (redCoins.get == 0) {
-        GameStatus(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus, None)
+        PlayerStatus(player.getIdentifier, 0, player.getPlayingStatus, 0, player.getBlackCoins, player.getWonStatus, None)
       } else {
-        this.updateStatus(player, rules, false)
+        this.updateStatus(player, rules, None)
       }
     } else {
       if (ruleType == AppConfig.getConfig("com.sahaj.command.failedHit")) {
         this.failedHit(player, rules)
       } else {
-        this.updateStatus(player, rules, false)
+        this.updateStatus(player, rules, None)
       }
     }
   }
 
-  def updateStatus(player: Player, value: StrikeRules, isWon: Boolean): GameStatus = {
+  def updateStatus(player: Player, value: StrikeRules, isWon: Option[Boolean]): PlayerStatus = {
     if (!value.isValidStrike) player.setFoulsCount(player.getFoulsCount + 1)
     if (player.getFoulsCount == this.getRules.maxFouls) {
       value.score = value.score + this.getRules.onFouls
@@ -45,18 +45,20 @@ object RuleManager extends Mediator {
     player.setBlackCoins(value.onBlockCoins)
     player.setPlayingStatus(value.playingStatus)
     player.setWonStatus(isWon)
-    GameStatus(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus, None)
+    PlayerStatus(player.getIdentifier, player.getScore, player.getPlayingStatus, player.getRedCoins, player.getBlackCoins, player.getWonStatus, None)
   }
 
-  def getMatchStatus(player1: Player, player2: Player, carrom: CarromBoard): GameStatus = {
+  def getMatchStatus(player1: Player, player2: Player, carrom: CarromBoard): PlayerStatus = {
     val minPointsToWon = this.getRules.minPointsToWon
     val minDiffToWon = this.getRules.opponMinDiff
 
     if (player1.getScore >= minPointsToWon && ((player1.getScore - player2.getScore) >= minDiffToWon)) {
-      GameStatus(player1.getIdentifier, player1.getScore, player1.getPlayingStatus, player1.getRedCoins, player1.getBlackCoins, player1.getWonStatus, Option("WON"))
+      player1.setWonStatus(Some(true))
+      PlayerStatus(player1.getIdentifier, player1.getScore, player1.getPlayingStatus, player1.getRedCoins, player1.getBlackCoins, player1.getWonStatus, Option("WON"))
     }
     else if (player2.getScore >= minPointsToWon && ((player2.getScore - player1.getScore) >= minDiffToWon)) {
-      GameStatus(player2.getIdentifier, player2.getScore, player2.getPlayingStatus, player2.getRedCoins, player2.getBlackCoins, player2.getWonStatus, Option("WON"))
+      player2.setWonStatus(Some(true))
+      PlayerStatus(player2.getIdentifier, player2.getScore, player2.getPlayingStatus, player2.getRedCoins, player2.getBlackCoins, player2.getWonStatus, Option("WON"))
     } else {
       null
     }
@@ -64,7 +66,7 @@ object RuleManager extends Mediator {
   }
 
 
-  def failedHit(player: Player, value: StrikeRules): GameStatus = {
+  def failedHit(player: Player, value: StrikeRules): PlayerStatus = {
     var score = 0
     var isPlaying = true
     if (player.getAttempts == value.maxAttempts.getOrElse(3)) {
@@ -74,7 +76,7 @@ object RuleManager extends Mediator {
     } else {
       player.setAttempts(player.getAttempts + 1)
     }
-    updateStatus(player, StrikeRules("FAILED_HIT", score, value.onBlockCoins, value.onRedCoins, false, isPlaying, None), false)
+    updateStatus(player, StrikeRules("FAILED_HIT", score, value.onBlockCoins, value.onRedCoins, false, isPlaying, None), None)
   }
 
   def getPlayer(player1: Player, player2: Player): Player = {

@@ -20,7 +20,7 @@ case class Rules(strikeRules: List[StrikeRules],
                 )
 
 
-case class GameStatus(identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean, status:Option[String])
+case class PlayerStatus(identifier: String, score: Int, isPlaying: Boolean, redCoins: Int, blockCoins: Int, isWon: Boolean, status:Option[String])
 
 
 trait Mediator {
@@ -28,7 +28,7 @@ trait Mediator {
 
   def getRules: Rules
 
-  def validate(player: Player, ruleType: String, blockCoins: Option[Int], redCoins: Option[Int]): GameStatus
+  def validate(player: Player, ruleType: String, blockCoins: Option[Int], redCoins: Option[Int]): PlayerStatus
 
 }
 

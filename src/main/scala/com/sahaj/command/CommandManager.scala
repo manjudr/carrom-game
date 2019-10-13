@@ -1,6 +1,7 @@
 package com.sahaj.command
 
 import com.sahaj.executors.Player
+import com.sahaj.mediator.PlayerStatus
 
 import scala.collection.mutable
 
@@ -13,7 +14,7 @@ object CommandManager {
   }
 
 
-  def execute(commandName: String, player: Player): Unit = {
+  def execute(commandName: String, player: Player): PlayerStatus = {
     val command: Command = commandMap(commandName)
     if (command == null) throw new IllegalStateException("no command registered for " + commandName)
     command.execute(player)
