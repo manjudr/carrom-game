@@ -1,3 +1,6 @@
+/**
+  * Author: Manjunath Davanam <manjunathdavanam@gmail.com>
+  */
 package com.sahaj.services
 
 import com.typesafe.config.{Config, ConfigFactory}

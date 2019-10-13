@@ -1,3 +1,7 @@
+/**
+  * Author: Manjunath Davanam <manjunathdavanam@gamil.com>
+  */
+
 import com.sahaj.services.{AppConfig, CarromBoardService}
 
 class TestCarromService extends BaseSpec {

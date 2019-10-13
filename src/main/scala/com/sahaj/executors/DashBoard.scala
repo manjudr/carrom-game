@@ -1,20 +1,55 @@
+/**
+  * Author: Manjunath Davanam <manjunathdavanam@gamil.com>
+  */
+
+
 package com.sahaj.executors
 
-import com.sahaj.mediator.PlayerStatus
+import com.sahaj.models.PlayerStatus
 import com.sahaj.services.AppConfig
 
+/**
+  * DashBoard Trait
+  */
 trait MainDashBoard {
+  /**
+    * Method to show the player/carrom/game status
+    *
+    * @param player - Player properties(id, score, isWon, ..etc.,
+    * @param carram - CarromBoard, To show remaning red/block coins left on the carrom board
+    * @param status - Status of the Player/Game
+    */
   def show(player: Option[Player], carrom: Option[CarromBoard], status: Option[PlayerStatus]): Unit
 
+  /**
+    * Method to clear the dashboard
+    *
+    * @return
+    */
   def clear: Boolean
 
+  /**
+    * Method to read the input
+    *
+    * @return - Integer keys
+    */
   def read: Int
 
 }
 
+/**
+  * Dashboard manager to create the Dashboard to show score/player/match status
+  */
 object DashBoard extends MainDashBoard {
   override def clear: Boolean = ???
 
+  /**
+    * Method to show the player/carrom/game status
+    *
+    * @param player - Player properties(id, score, isWon, ..etc.,
+    * @param carram - CarromBoard, To show remaning red/block coins left on the carrom board
+    * @param status - Status of the Player/Game
+    */
   override def show(player: Option[Player], carram: Option[CarromBoard], status: Option[PlayerStatus]): Unit = {
     if (player.isDefined) {
       println("==============PLAYER====================")
@@ -44,10 +79,21 @@ object DashBoard extends MainDashBoard {
     }
   }
 
+  /**
+    * Method to read the input
+    *
+    * @return - Integer keys
+    */
   override def read: Int = {
     scala.io.StdIn.readInt()
   }
 
+  /**
+    * Method to show the options and read the commands from  the player
+    *
+    * @param player - Player
+    * @return - Command
+    */
   def promptOptions(player: Player): String = {
     println("..........................................................")
     println(player.getIdentifier.toUpperCase() + ": IT'S YOUR TURN, PLEASE SELECT THE CHOICE NUMBER")

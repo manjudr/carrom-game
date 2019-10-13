@@ -1,5 +1,13 @@
+/**
+  * Author: Manjunath Davanam <manjunathdavanam@gmail.com>
+  */
+
 import com.sahaj.executors.Player
 import com.sahaj.services.CarromBoardService
+
+/**
+  * Main class to invoke the carrom board service to play the game
+  */
 
 object Carrom {
   def main(args: Array[String]): Unit = {
